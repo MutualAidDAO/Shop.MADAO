@@ -39,18 +39,18 @@ const BlowUpBackground: NextPage = (props) => {
     };
   }, []);
 
-    const {
+  //   const {
     
-      price: props.price,
-      productID: props.productID,
+  //     price: props.price,
+  //     productID: props.productID,
     
-      productName: props.productName,
-      contactHereToPurchase: props.contactHereToPurchase,
-      shipping: props.shipping,
-      Online: props.Online,
-      productDescription: props.productDescription,
-      image: props.image}
-  } = listingContent;
+  //     productName: props.productName,
+  //     contactHereToPurchase: props.contactHereToPurchase,
+  //     shipping: props.shipping,
+  //     Online: props.Online,
+  //     productDescription: props.productDescription,
+  //     image: props.image}
+  // } = listingContent;
 
 
   return (

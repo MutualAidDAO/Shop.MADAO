@@ -68,9 +68,10 @@ const Index: NextPage = (props: {
 export async function getStaticProps() {
 
   const GEThandle = async () => {
+    let listingsGET:
     await fetch('/api/GEThandle', {
       method:'GET',
-      body: JSON.stringify(ListedData),
+      body: JSON.stringify(listingsGET),
       headers: {
         'Content-Type':"application/json"
       }
