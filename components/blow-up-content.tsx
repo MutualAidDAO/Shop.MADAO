@@ -2,16 +2,19 @@ import type { NextPage } from "next";
 
 type BlowUpContentType = {
   productName?: string;
-  contactHereToPurchase?: string;
-  shippingOnline?: string;
-  productDescription?: string;
   price?: string;
+  contactHereToPurchase?: string;
+  shipping?: string;
+  Online?:boolean;
+  productDescription?: string;
+  
 };
 
 const BlowUpContent: NextPage<BlowUpContentType> = ({
   productName,
   contactHereToPurchase,
-  shippingOnline,
+  shipping,
+  Online,
   productDescription,
   price,
 }) => {
@@ -22,7 +25,7 @@ const BlowUpContent: NextPage<BlowUpContentType> = ({
       </div>
       <p className="m-[0] relative inline-block">{price}</p>
       <div className="relative inline-block">{contactHereToPurchase}</div>
-      <div className="relative inline-block">{shippingOnline}</div>
+      <div className="relative inline-block">{shipping || Online}</div>
       <div className="relative inline-block">{productDescription}</div>
     </div>
   );

@@ -1,3 +1,6 @@
+
+
+import {useRef } from "react"
 import type { NextPage } from "next";
 import {
   TextField,
@@ -7,9 +10,49 @@ import {
   IconButton,
 } from "@mui/material";
 
-const ListingForm: NextPage = () => {
+const ListingForm: NextPage = (props) => {
+
+  const priceRef = useRef();
+  const productIDRef = useRef();
+  const OnlineRef = useRef();
+  const productNameRef = useRef();
+  const contactRef = useRef();
+  const shippingRef = useRef();
+  const DescRef = useRef();
+  const imageRef = useRef();
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    const price = priceRef.current.value;
+    const productID = productIDRef.current.value;
+    
+    const productName = productNameRef.current.value;
+    const contactHereToPurchase = contactRef.current.value;
+    const shipping = shippingRef.current.value;
+    const Online = OnlineRef.current.value;
+    const productDescription = DescRef.current.value;
+    const image = imageRef.current.value;
+
+
+    const ListedData = {
+      price,
+  productID,
+  
+  productName,
+  contactHereToPurchase,
+  shipping,
+  Online,
+  productDescription,
+  image
+    }
+
+    props.onListed(ListedData);
+  }
+
+  
   return (
-    <main className="self-stretch bg-gray-100 h-[601px] shrink-0 flex flex-col p-[29px_13px_60px] box-border items-center justify-start gap-[18px] lg:w-full md:h-[60%] md:pb-[650px] md:box-border">
+    <form onSubmit={submitHandler} className="self-stretch bg-gray-100 h-[601px] shrink-0 flex flex-col p-[29px_13px_60px] box-border items-center justify-start gap-[18px] lg:w-full md:h-[60%] md:pb-[650px] md:box-border">
       <div className="self-stretch flex flex-row items-start justify-start gap-[705px] lg:w-full lg:gap-[25%] md:w-full md:flex-col md:pl-[0px] md:pt-[0px] md:box-border md:gap-[15px]">
         <div className="relative w-[251px] h-[155px] shrink-0">
           <TextField
@@ -22,6 +65,7 @@ const ListingForm: NextPage = () => {
             size="medium"
             margin="none"
             required
+            ref={priceRef}
           />
           <TextField
             className="[border:none] bg-[transparent] absolute top-[0px] left-[0px]"
@@ -34,10 +78,22 @@ const ListingForm: NextPage = () => {
             size="medium"
             margin="none"
             required
+            ref={productIDRef}
           />
         </div>
         <div className="relative w-[437px] h-[215px] shrink-0">
-          <TextField
+
+        <input
+            className="absolute top-[0px] left-[0px] bg-gray-400 w-[382px] h-[47px]"
+            type="file"
+            //required
+            ref={imageRef}
+          />
+
+           
+              
+            
+            <TextField
             className="[border:none] bg-[transparent] absolute top-[65px] left-[0px]"
             sx={{ width: 382 }}
             color="primary"
@@ -47,13 +103,20 @@ const ListingForm: NextPage = () => {
             placeholder="Shipping Costs"
             size="medium"
             margin="none"
+            ref={shippingRef}
           />
-          <input
-            className="absolute top-[0px] left-[0px] bg-gray-400 w-[382px] h-[47px]"
-            type="file"
-            required
-            size
+          
+          
+          <FormControlLabel
+            className="absolute top-[122px] left-[0px]"
+            label="Online Service/Digital Deliverable"
+            labelPlacement="end"
+            control={<Radio color="primary" size="medium" />}
+           // hidechild= ternarydata ? "stringdata" : true //-=----Edit to show/hide radio in data and blowUpContent for DB send
+
+           ref={OnlineRef}
           />
+            
           <TextField
             className="[border:none] bg-[transparent] absolute top-[173px] left-[0px]"
             sx={{ width: 382 }}
@@ -65,12 +128,7 @@ const ListingForm: NextPage = () => {
             size="medium"
             margin="none"
             required
-          />
-          <FormControlLabel
-            className="absolute top-[122px] left-[0px]"
-            label="Online Service/Digital Deliverable"
-            labelPlacement="end"
-            control={<Radio color="primary" size="medium" />}
+            ref={contactRef}
           />
         </div>
       </div>
@@ -79,17 +137,18 @@ const ListingForm: NextPage = () => {
         color="primary"
         variant="outlined"
         multiline
-        rows={8}
+        minRows={8}
         maxRows={12}
         label="Product Description"
         placeholder="Product Description"
         margin="dense"
         required
+        ref={DescRef}
       />
-      <IconButton color="primary" disabled>
+      <IconButton color="primary" disabled  >
         <Icon>send_sharp</Icon>
       </IconButton>
-    </main>
+    </form>
   );
 };
 

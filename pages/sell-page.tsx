@@ -1,14 +1,36 @@
 import type { NextPage } from "next";
-import Navbar from "../components/navbar";
+import Router from "next/router";
+
 import ListingForm from "../components/listing-form";
-import BottomBar from "../components/bottom-bar";
+
 
 const SellPage: NextPage = () => {
+
+  const submitHandler = async (ListedData) =>{
+      
+
+
+      const response = await fetch('/api/submitListing', {
+        method:'POST',
+        body: JSON.stringify(ListedData),
+        headers: {
+          'Content-Type':"application/json"
+        }
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+      Router().push('/')
+  };
+
+
+
   return (
-    <div className="relative bg-blue w-full h-screen flex flex-col items-center justify-between">
-      <Navbar />
-      <ListingForm />
-      <BottomBar />
+    <div className="relative bg-blue w-full h-screen flex flex-col items-center justify-center">
+      
+      <ListingForm onListed={submitHandler} />
+     
     </div>
   );
 };

@@ -3,7 +3,12 @@ import { useEffect } from "react";
 import { Icon, IconButton } from "@mui/material";
 import BlowUpContent from "../components/blow-up-content";
 
-const BlowUpBackground: NextPage = () => {
+
+//------------------------------------------------------------------------
+const BlowUpBackground: NextPage = (props) => {
+
+
+
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
       "[data-animate-on-scroll]"
@@ -34,12 +39,26 @@ const BlowUpBackground: NextPage = () => {
     };
   }, []);
 
+    const {
+    
+      price: props.price,
+      productID: props.productID,
+    
+      productName: props.productName,
+      contactHereToPurchase: props.contactHereToPurchase,
+      shipping: props.shipping,
+      Online: props.Online,
+      productDescription: props.productDescription,
+      image: props.image}
+  } = listingContent;
+
+
   return (
     <div className="flex-1 bg-gray-100 h-[667px] flex flex-row p-[20px_20px_48px] box-border items-start justify-start gap-[10px] text-left text-lg text-black font-eb-garamond md:flex-col sm:max-w-[100vw]">
       <BlowUpContent
         productName="Product Name"
-        contactHereToPurchase={`Contact {here} to purchase`}
-        shippingOnline="Shipping/Online(boolean)"
+        contactHereToPurchase={`Contact here to purchase`}
+        shippingOnline="Shipping/Online(boolean)"state
         productDescription="Product Description"
         price="₥~~~"
       />

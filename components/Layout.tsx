@@ -7,7 +7,7 @@ export default function Layout({
   children: React.ReactNode
   home?: boolean
 }) {
-  const siteTitle = `Wallet Speed Testing Platform`
+  const siteTitle = `MADAO Market`
 
   return (
     <div data-theme="mytheme" className="m-0 max-w-full">
@@ -18,9 +18,14 @@ export default function Layout({
           name="description"
           content="Join the top Mutual Aid Basic Income Project"
         />
-        <meta property="og:image" content="" />
+        <meta property="og:image" content="/" />
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
+        <title>{siteTitle}</title>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
       </Head>
       <header>
         <Navbar />

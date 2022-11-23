@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import Layout from '../components/Layout'
+
 
 // -------- Title function of dropdown bubble 
 const getFaqTitle = (n: number) => {
@@ -50,7 +50,7 @@ const getFaqText = (n: number) => {
 // Page call to change to this Layout section with stylings
 const Faq: NextPage = () => {
   return (
-    <Layout>
+    <>
       <div className="bg-accent-dark hero min-h-screen bg-hero bg-cover">
         <div className="hero-content flex flex-col text-center text-neutral">
           {[1, 2, 3, 4, 5, 6, 7].map((n) => ( //This is the mapping array to add or remove additonal Dropdown bubbles
@@ -58,7 +58,7 @@ const Faq: NextPage = () => {
           ))}
         </div>
       </div>
-    </Layout>
+    </>
   )
 }
 

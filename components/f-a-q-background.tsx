@@ -34,7 +34,7 @@ const FAQBackground: NextPage = () => {
   }, []);
 
   return (
-    <div className="self-stretch flex-1 bg-blue flex flex-col items-center justify-center">
+    <section className="self-stretch flex-1 bg-blue flex flex-col items-center justify-center">
       <div className="self-stretch flex-1 bg-gray-300 flex flex-row p-[10px] box-border items-center justify-center">
         <div className="self-stretch flex-1 bg-gray-100 flex flex-row p-[20px_20px_48px] box-border items-start justify-center relative gap-[10px]">
           <FaqContent />
@@ -46,7 +46,7 @@ const FAQBackground: NextPage = () => {
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

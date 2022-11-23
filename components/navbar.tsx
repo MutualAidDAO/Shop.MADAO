@@ -77,7 +77,7 @@ const Navbar: NextPage = () => {
             variant="outlined"
             color="success"
             size="large"
-            href="/index"
+            href="/"
             endIcon={<Icon>lock_sharp</Icon>}
           >
             Buy
