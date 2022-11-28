@@ -27,30 +27,56 @@ export default function useShop(): ReturnType {
   }
 
   const createProduct = async () => {
-
-    const response = await axios('https://09zlx4b2rl.execute-api.us-west-2.amazonaws.com/Listings/ListingQuery', 
+        //TODO abstract this response into next api folder for additional security
+    const response = await axios.post('https://09zlx4b2rl.execute-api.us-west-2.amazonaws.com/Listings/ListingQuery', 
     { 
       method: 'POST', 
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:3000/'
+        'Origin': 'http://localhost:3000/',
+        'Access-Control-Request-Methods': 'POST, ANY, OPTIONS'  ,
+        'Access-Control-Request-Headers': 'Content-Type, Authorization, X-Requested-With' , 
+        'Access-Control-Allow-Credentials' : true ,
+
       },
       body: JSON.stringify({
-        Item: {
-         "AlbumTitle": {
-           S: "Somewhat Famous"
-          }, 
-         "Artist": {
-           S: "No One You Know"
-          }, 
-         "SongTitle": {
-           S: "Call Me Today"
-          }
-        }, 
+        Item: 
+        {
+          productID: {
+            S:' productKey'},
+         key: {
+         S: 'productKey'}
+          ,
+          productName:{
+            S: "Kai's Kitchen"},
+              contactHereToPurchase:{
+                S:
+              `Contact Kai to purchase`},
+              shippingOnline:{ S: "Shipping/Online(boolean)"},//state,
+              productDescription:{ S: "Tasty"},
+              price: {N: 35},    //"₥35"
+        }
+        // {
+        //  "AlbumTitle": {
+        //    S: "Somewhat Famous"
+        //   }, 
+        //  "Artist": {
+        //    S: "No One You Know"
+        //   }, 
+        //  "SongTitle": {
+        //    S: "Call Me Today"
+        //   }
+        // }, 
+        ,
         ReturnConsumedCapacity: "TOTAL", 
-        TableName: "Music"
+        TableName: "Listings"
        })
+    }).then(function (response) {
+      console.log(response);
     })
+    .catch(function (error) {
+      console.log(error);
+    });
 
     console.log('response', response);
   }
@@ -95,3 +121,17 @@ type Item = {
 type AlbumTitle = {
   S: string;
 }
+
+// productID: {
+//   S:' productKey'},
+// key: {
+// S: 'productKey'}
+// ,
+// productName:{ "CopyMeme"},
+// contactHereToPurchase:{S: `Contact shael to purchase`},
+// shippingOnline: {S: "Shipping/Online(boolean)"},//stateful,
+// productDescription:{S: "Copywriting/MemeMaking"},
+// price:{N: 25} ,  //"₥25"
+// },
+// ReturnConsumedCapacity: "TOTAL", 
+// TableName: "Listings"}
