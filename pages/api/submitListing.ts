@@ -13,19 +13,19 @@ export const submitHandler = async (req, res) => {
     }finally {
 
     
-    const {
-      price,
-      productID,
+    // const {
+    //   price,
+    //   productID,
       
-      productName,
-      contactHereToPurchase,
-      shipping,
-      Online,
-      productDescription,
-      image
-    } = data;
+    //   productName,
+    //   contactHereToPurchase,
+    //   shipping,
+    //   Online,
+    //   productDescription,
+    //   image
+    // } = data;
 
-    await const client = 'somelinkednonsense':
+    await const clientAPI = 'somelinkednonsense':
 
     res.status(201).json({ message: 'Listing Posted!'})
 

@@ -84,20 +84,3 @@ function FaqItem({ heading, text }: { heading: string; text: string }) {
 
 
 
-// this is for another part, you know ;p
-
-// var params = {
-//   Item: {
-//    "AlbumTitle": {
-//      S: "Somewhat Famous"
-//     }, 
-//    "Artist": {
-//      S: "No One You Know"
-//     }, 
-//    "SongTitle": {
-//      S: "Call Me Today"
-//     }
-//   }, 
-//   ReturnConsumedCapacity: "TOTAL", 
-//   TableName: "Music"
-//  };

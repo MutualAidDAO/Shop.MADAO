@@ -1,13 +1,23 @@
 import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
+
+
 import { ThemeProvider, createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import "./global.css";
 import Layout from "../components/Layout";
+import { NextPage } from "next/types";
 
-export default function MyApp(props: any) {
+
+//--------------------------------------------------------------
+type MyAppProps = {
+  Component: NextPage,
+  pageProps: any,
+}
+
+
+
+export default function MyApp(props: MyAppProps) {
   const { Component, pageProps } = props;
 
   React.useEffect(() => {
@@ -32,7 +42,21 @@ export default function MyApp(props: any) {
   );
 }
 
-MyApp.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  pageProps: PropTypes.object.isRequired,
-};
+
+//--------------Deprecated
+
+// MyApp.propTypes = {
+//   Component: PropTypes.elementType.isRequired,
+//   pageProps: PropTypes.object.isRequired,
+// };
+
+
+
+// type NextPageWithLayout = NextPage & {
+//   getLayout?: (page: React.ReactElement) => React.ReactNode;
+// };
+
+// interface MyAppProps extends AppProps {
+//   emotionCache?: EmotionCache;
+//   Component: NextPageWithLayout;
+// }

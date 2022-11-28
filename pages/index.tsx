@@ -6,7 +6,7 @@ import ListingViewBackground from "../components/listing-view-background";
 
 //----------------------------------------------------------------------
 
-const productKey = "productID" + (Math.random() * 10000).toFixed(0) + Math.random().toString()
+const productKey =    'something'               //"productID" + (Math.random() * 10000).toFixed(0) + Math.random().toString()
 const testingArray = [
   {
     productID: productKey,
@@ -40,16 +40,19 @@ const testingArray = [
 
 
 //-------------------------------------------------------------------------------
-const Index: NextPage = (props: {
-  productID: string;
-  key: string;
-  productName: string;
-  contactHereToPurchase: string;
-  shipping: string;
-  Online: boolean;
-  productDescription: string;
-  price: string;
-}[]) => {
+// props: {
+//   productID: string;
+//   key: string;
+//   productName: string;
+//   contactHereToPurchase: string;
+//   shipping: string;
+//   Online: boolean;
+//   productDescription: string;
+//   price: string;
+// }[]
+
+
+const Index: NextPage = (props) => {
     // const [loadedListings,setLoadedListings] = useState(String[]);
     // useEffect(() =>{
     //   //send GET request with this
@@ -59,47 +62,50 @@ const Index: NextPage = (props: {
   return (
     <div className="relative bg-blue w-screen h-screen flex flex-col items-start justify-start gap-[0px] md:h-screen md:w-screen md:min-h-[950]">
       
-      <ListingViewBackground ListingsContent = {props.ListingsContent} />
+      {/* <ListingViewBackground ListingsContent={props.ListingsContent} /> */}
+      <ListingViewBackground />
       
     </div>
   );
 };
 
-export async function getStaticProps() {
+// export async function getStaticProps() {
 
-  const GEThandle = async () => {
-    let listingsGET:
-    await fetch('/api/GEThandle', {
-      method:'GET',
-      body: JSON.stringify(listingsGET),
-      headers: {
-        'Content-Type':"application/json"
-      }
-    })
-  }
+  // const GEThandle = async () => {
+  //   let listingsGET:
+  //   await fetch('/api/GEThandle', {
+  //     method:'GET',
+  //     body: JSON.stringify(listingsGET),
+  //     headers: {
+  //       'Content-Type':"application/json"
+  //     }
+  //   })
+
+  //   return 
+  // }
 
 
  
-  const listingsArray = await listingsGET.find().toArray();
+//   const listingsArray = await listingsGET.find().toArray();
 
-  console.log(result);
+//   console.log(result);
 
-  return {
-    props: {
-      ListingsContent: listingsArray.map( (Listings) =>({
-        price: Listings.price,
-        productID: Listings.productID,
+//   return {
+//     props: {
+//       ListingsContent: listingsArray.map( (Listings) =>({
+//         price: Listings.price,
+//         productID: Listings.productID,
       
-        productName: Listings.productName,
-        // contactHereToPurchase: Listings.contactHereToPurchase,
-        // shipping: Listings.shipping,
-        // Online: Listings.Online,
-        // productDescription: Listings.productDescription,
-        image: Listings.image
-    } ))
-}, // will be passed to the page component as props
-revalidate: 300
-}};
+//         productName: Listings.productName,
+//         // contactHereToPurchase: Listings.contactHereToPurchase,
+//         // shipping: Listings.shipping,
+//         // Online: Listings.Online,
+//         // productDescription: Listings.productDescription,
+//         image: Listings.image
+//     } ))
+// }, // will be passed to the page component as props
+// revalidate: 300
+// }};
 
 
 export default Index;
