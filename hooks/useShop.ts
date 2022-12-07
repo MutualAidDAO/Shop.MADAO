@@ -42,8 +42,8 @@ export default function useShop(): ReturnType {
       body: JSON.stringify({
         Item: 
         {
-          productID: {
-            S:' productKey'},
+          listing: {
+            S:' productKey'}, // must be a string with partition key of listing //required
          key: {
          S: 'productKey'}
           ,
@@ -54,7 +54,7 @@ export default function useShop(): ReturnType {
               `Contact Kai to purchase`},
               shippingOnline:{ S: "Shipping/Online(boolean)"},//state,
               productDescription:{ S: "Tasty"},
-              price: {N: 35},    //"₥35"
+              price: {N: "35"},    //"₥35" //all AWS dynamo DB needs strings
         }
         // {
         //  "AlbumTitle": {
