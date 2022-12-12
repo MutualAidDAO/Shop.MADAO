@@ -28,7 +28,7 @@ export default function useShop(): ReturnType {
 
   const createProduct = async () => {
         //TODO abstract this response into next api folder for additional security
-    const response = await axios.post('https://09zlx4b2rl.execute-api.us-west-2.amazonaws.com/Listings/ListingQuery', 
+    const response = await axios.post(config.apiEndP, 
     { 
       method: 'POST', 
       headers: {
@@ -37,6 +37,7 @@ export default function useShop(): ReturnType {
         'Access-Control-Request-Methods': 'POST, ANY, OPTIONS'  ,
         'Access-Control-Request-Headers': 'Content-Type, Authorization, X-Requested-With' , 
         'Access-Control-Allow-Credentials' : true ,
+        'x-api-key' : config.apiKey,
 
       },
       body: JSON.stringify({
@@ -44,9 +45,10 @@ export default function useShop(): ReturnType {
         {
           listing: {
             S:' productKey'}, // must be a string with partition key of listing //required
-         key: {
-         S: 'productKey'}
-          ,
+         
+          productImage: {
+            B: null
+          },
           productName:{
             S: "Kai's Kitchen"},
               contactHereToPurchase:{
