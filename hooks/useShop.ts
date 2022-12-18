@@ -1,4 +1,5 @@
 import axios from "axios";
+import { config } from "process";
 
 
 type ReturnType = {
@@ -7,11 +8,11 @@ type ReturnType = {
 }
 
 export default function useShop(): ReturnType {
-
-  const config = {
-    apiKey: 'yHFcBOA0TL94BmUYPCdZ49zbOS0LVFBC2qxQT33V' ,
-    apiEndP: 'https://09zlx4b2rl.execute-api.us-west-2.amazonaws.com/Listings/ListingQuery'
-  }
+  
+ 
+   const apiKey = 'yHFcBOA0TL94BmUYPCdZ49zbOS0LVFBC2qxQT33V' ;
+    const apiEndP = `https://09zlx4b2rl.execute-api.us-west-2.amazonaws.com/Listings/ListingQuery`
+  
 
   const getProducts = async () => {
 
@@ -25,54 +26,45 @@ export default function useShop(): ReturnType {
     // return that data(records)
     return [];
   }
-
+ params = {
+ Item: 
+ {
+    listing: `productKey`, // must be a string with partition key of listing //required
+  
+   productImage: 
+      null
+   ,
+   productName:
+      "Kai's Kitchen",
+       contactHereToPurchase:
+         
+       `Contact Kai to purchase`,
+       shippingOnline: "Shipping/Online(boolean)",//state,
+       productDescription: "Tasty",
+       price: 35,    //"₥35" //all AWS dynamo DB needs strings
+ },
+ ReturnConsumedCapacity: "TOTAL", 
+ TableName: "Listings"
+};
   const createProduct = async () => {
         //TODO abstract this response into next api folder for additional security
-    const response = await axios.post(config.apiEndP, 
+    const response = await axios.post(apiEndP, 
     { 
       method: 'POST', 
       headers: {
         'Content-Type': 'application/json',
-        'Origin': 'http://localhost:3000/',
-        'Access-Control-Request-Methods': 'POST, ANY, OPTIONS'  ,
-        'Access-Control-Request-Headers': 'Content-Type, Authorization, X-Requested-With' , 
-        'Access-Control-Allow-Credentials' : true ,
-        'x-api-key' : config.apiKey,
+        'Access-Control-Allow-Origin': '*',
+        'x-api-key' : apiKey,
+        //'Access-Control-Request-Methods': 'POST, ANY, OPTIONS'  ,
+        //'Origin': 'http://localhost:3000/',
+        
+        //'Access-Control-Request-Headers': 'Content-Type, Authorization, X-Requested-With' , 
+        
+        //'Access-Control-Allow-Credentials' : true ,
+       
 
       },
-      body: JSON.stringify({
-        Item: 
-        {
-          listing: {
-            S:' productKey'}, // must be a string with partition key of listing //required
-         
-          productImage: {
-            B: null
-          },
-          productName:{
-            S: "Kai's Kitchen"},
-              contactHereToPurchase:{
-                S:
-              `Contact Kai to purchase`},
-              shippingOnline:{ S: "Shipping/Online(boolean)"},//state,
-              productDescription:{ S: "Tasty"},
-              price: {N: "35"},    //"₥35" //all AWS dynamo DB needs strings
-        }
-        // {
-        //  "AlbumTitle": {
-        //    S: "Somewhat Famous"
-        //   }, 
-        //  "Artist": {
-        //    S: "No One You Know"
-        //   }, 
-        //  "SongTitle": {
-        //    S: "Call Me Today"
-        //   }
-        // }, 
-        ,
-        ReturnConsumedCapacity: "TOTAL", 
-        TableName: "Listings"
-       })
+      body: JSON.stringify(params)
     }).then(function (response) {
       console.log(response);
     })
