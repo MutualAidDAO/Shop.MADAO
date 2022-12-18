@@ -48,23 +48,23 @@ export default function useShop(): ReturnType {
 };
   const createProduct = async () => {
         //TODO abstract this response into next api folder for additional security
-    const response = await axios.post(apiEndP, 
+    const response = await axios.post(apiEndP, params,
     { 
-      method: 'POST', 
+      // method: 'POST', 
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        
         'x-api-key' : apiKey,
         //'Access-Control-Request-Methods': 'POST, ANY, OPTIONS'  ,
         //'Origin': 'http://localhost:3000/',
         
-        //'Access-Control-Request-Headers': 'Content-Type, Authorization, X-Requested-With' , 
-        
-        //'Access-Control-Allow-Credentials' : true ,
+        // 'Access-Control-Request-Headers': 'Content-Type,X-Amz-Date,Access-Control-Allow-Origin,Authorization,X-Api-Key,X-Amz-Security-Token' , 
+         'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials' : true ,
        
 
       },
-      body: JSON.stringify(params)
+      
     }).then(function (response) {
       console.log(response);
     })
