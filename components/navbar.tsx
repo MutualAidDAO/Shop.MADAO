@@ -1,8 +1,14 @@
 import type { NextPage } from "next";
 import { useEffect } from "react";
 import { Button, Icon } from "@mui/material";
+import { getAvailableWallets } from "../hooks/useWallets"
 
 const Navbar: NextPage = () => {
+
+
+
+
+  //----------------------Helper const above----------------
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
       "[data-animate-on-scroll]"
@@ -33,6 +39,18 @@ const Navbar: NextPage = () => {
     };
   }, []);
 
+    
+  const getWallets = () =>{
+    
+    
+    const wallets = getAvailableWallets()
+
+    return //PUT MODAL HERE FOR DISPLAYING WALLETS
+  
+  };
+
+
+
   return (
     <nav className="self-stretch bg-turquoise flex flex-row items-start justify-start gap-[0px] lg:flex-col lg:gap-[30]">
       <div className="relative bg-turquoise w-[381px] h-[104px] shrink-0">
@@ -43,6 +61,7 @@ const Navbar: NextPage = () => {
           color="primary"
           size="small"
           endIcon={<Icon>arrow_forward_ios_sharp</Icon>}
+          href='https://madao.fandom.com/'
         >
           No Wallet? Get one
         </Button>
@@ -52,6 +71,7 @@ const Navbar: NextPage = () => {
           variant="outlined"
           color="primary"
           size="small"
+          onClick={getWallets}
         >
           Connect Wallet
         </Button>

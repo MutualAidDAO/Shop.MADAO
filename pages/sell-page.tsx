@@ -31,9 +31,9 @@ const SellPage: NextPage = () => {
 
   return (
     <div className="relative bg-blue w-full h-screen flex flex-col items-center justify-center">
-      <Button variant="contained" onClick={createProduct}>Create a product</Button>
       
-      {/* <ListingForm onListed={submitHandler} /> */}
+      <ListingForm  /> 
+      {/* <Button variant="contained" onClick={createProduct}>Create a product</Button> */}
      
     </div>
   );

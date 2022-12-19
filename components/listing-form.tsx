@@ -1,6 +1,6 @@
 
 
-import {useRef } from "react"
+import {useRef, useState } from "react"
 import type { NextPage } from "next";
 import {
   TextField,
@@ -8,48 +8,89 @@ import {
   Radio,
   Icon,
   IconButton,
+  Switch,
 } from "@mui/material";
+import {createProduct} from '../hooks/useShop'
 
-const ListingForm: NextPage = (props) => {
 
+//----------------------------------------------------------------------------------------------
+
+const ListingForm: NextPage = () => {
+
+
+  const [shippingToggle, setShippingToggle] = useState(true);
   const priceRef = useRef();
   const productIDRef = useRef();
   const OnlineRef = useRef();
-  const productNameRef = useRef();
+  
   const contactRef = useRef();
   const shippingRef = useRef();
   const DescRef = useRef();
   const imageRef = useRef();
 
+  //---------------Helper consts above------------
+
+  const toggleElement = () => {
+    setShippingToggle(prevState => (!prevState))};
+
+
   const submitHandler = (event) => {
+
+   function imgBlobber () {
+    const reader = new FileReader();
+
+    reader.onload = function imgBlobber () {
+      const imgBlob = new Blob([reader.result], {type: 'image/jpeg'});
+      if (imgBlob.size <= 333333) {
+        // The size of the blob is 333KB
+        return imgBlob
+      } else {
+        // The size of the blob is not 333KB
+
+        return console.log("error on imgblob")
+      }
+      
+
+      
+    };
+    
+    reader.readAsArrayBuffer(imageRef.current.value);
+   }
+
+
+    
     event.preventDefault();
 
     const price = priceRef.current.value;
-    const productID = productIDRef.current.value;
+    const listing = productIDRef.current.value + "ID" + (Math.random() * 10000).toFixed(0) + "Date" + (Date.now()/1000000).toFixed(0);
     
-    const productName = productNameRef.current.value;
+    
     const contactHereToPurchase = contactRef.current.value;
     const shipping = shippingRef.current.value;
     const Online = OnlineRef.current.value;
     const productDescription = DescRef.current.value;
-    const image = imageRef.current.value;
-
+    const productImage = imgBlobber() ;
 
     const ListedData = {
-      price,
-  productID,
-  
-  productName,
+      
+  listing,
+  productImage,
   contactHereToPurchase,
   shipping,
   Online,
   productDescription,
-  image
-    }
-
-    props.onListed(ListedData);
+  
+  price,
+    };
+    createProduct(ListedData);
+   
   }
 
+  
+    
+  
+  
+  
   
   return (
     <form onSubmit={submitHandler} className="self-stretch bg-gray-100 h-[601px] shrink-0 flex flex-col p-[29px_13px_60px] box-border items-center justify-start gap-[18px] lg:w-full md:h-[60%] md:pb-[650px] md:box-border">
@@ -89,12 +130,20 @@ const ListingForm: NextPage = (props) => {
             //required
             ref={imageRef}
           />
-
-           
+            
+          <FormControlLabel
+            className="absolute top-[65px] left-[0px]"
+            label="Online Service/Digital Deliverable"
+            labelPlacement="end"
+            control={<Switch color="primary" size="medium" />}
+           // hidechild= ternarydata ? "stringdata" : true //-=----Edit to show/hide radio in data and blowUpContent for DB send
+            onChange={toggleElement}
+           ref={OnlineRef}
+          />
               
             
             <TextField
-            className="[border:none] bg-[transparent] absolute top-[65px] left-[0px]"
+            className="[border:none] bg-[transparent] absolute top-[112px] left-[0px]"
             sx={{ width: 382 }}
             color="primary"
             variant="outlined"
@@ -104,18 +153,13 @@ const ListingForm: NextPage = (props) => {
             size="medium"
             margin="none"
             ref={shippingRef}
-          />
+            disabled={!shippingToggle}
+            required={shippingToggle}
+            
+          /> 
           
           
-          <FormControlLabel
-            className="absolute top-[122px] left-[0px]"
-            label="Online Service/Digital Deliverable"
-            labelPlacement="end"
-            control={<Radio color="primary" size="medium" />}
-           // hidechild= ternarydata ? "stringdata" : true //-=----Edit to show/hide radio in data and blowUpContent for DB send
-
-           ref={OnlineRef}
-          />
+          
             
           <TextField
             className="[border:none] bg-[transparent] absolute top-[173px] left-[0px]"

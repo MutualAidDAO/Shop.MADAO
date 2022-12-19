@@ -26,28 +26,33 @@ export default function useShop(): ReturnType {
     // return that data(records)
     return [];
   }
- params = {
- Item: 
- {
-    listing: `productKey`, // must be a string with partition key of listing //required
-  
-   productImage: 
-      null
-   ,
-   productName:
-      "Kai's Kitchen",
-       contactHereToPurchase:
-         
-       `Contact Kai to purchase`,
-       shippingOnline: "Shipping/Online(boolean)",//state,
-       productDescription: "Tasty",
-       price: 35,    //"₥35" //all AWS dynamo DB needs strings
- },
- ReturnConsumedCapacity: "TOTAL", 
- TableName: "Listings"
-};
-  const createProduct = async () => {
+ 
+  const createProduct = async (ListedData:Item) => {
         //TODO abstract this response into next api folder for additional security
+
+       const params:CreateProductBody = {  //DO NOT STRING; there is stringify in XML compilation. AWS dynamo DB needs strings
+          Item: 
+          {
+             listing: ListedData.listing, // must be a string with partition key of listing //required
+           
+            productImage: 
+               ListedData.productImage,
+            
+        
+                contactHereToPurchase:
+                  
+                ListedData.contactHereToPurchase,
+                shipping: ListedData.shipping ,
+                
+                Online: ListedData.Online,//state,
+                productDescription: ListedData.productDescription,
+                price: ListedData.price,    //"₥35" This is the format to display with the Mill symbol 
+          },
+          ReturnConsumedCapacity: "TOTAL", 
+          TableName: "Listings"
+         };
+
+
     const response = await axios.post(apiEndP, params,
     { 
       // method: 'POST', 
@@ -55,13 +60,13 @@ export default function useShop(): ReturnType {
         'Content-Type': 'application/json',
         
         'x-api-key' : apiKey,
-        //'Access-Control-Request-Methods': 'POST, ANY, OPTIONS'  ,
-        //'Origin': 'http://localhost:3000/',
-        
-        // 'Access-Control-Request-Headers': 'Content-Type,X-Amz-Date,Access-Control-Allow-Origin,Authorization,X-Api-Key,X-Amz-Security-Token' , 
+       
          'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials' : true ,
-       
+        //Depricated Headers
+        //'Access-Control-Request-Methods': 'POST, ANY, OPTIONS'  ,
+        //'Origin': 'http://localhost:3000/',
+        // 'Access-Control-Request-Headers': 'Content-Type,X-Amz-Date,Access-Control-Allow-Origin,Authorization,X-Api-Key,X-Amz-Security-Token' , 
 
       },
       
@@ -83,22 +88,7 @@ export default function useShop(): ReturnType {
 
 
 // this is for another part, you know ;p
-
-var params = {
-  Item: {
-   "AlbumTitle": {
-     S: "Somewhat Famous"
-    }, 
-   "Artist": {
-     S: "No One You Know"
-    }, 
-   "SongTitle": {
-     S: "Call Me Today"
-    }
-  }, 
-  ReturnConsumedCapacity: "TOTAL", 
-  TableName: "Music"
- };
+type TableName =   string;
 
  type CreateProductBody = {
   Item: Item;
@@ -107,14 +97,31 @@ var params = {
 }
 
 type Item = {
-  AlbumTitle: AlbumTitle;
-  Artist: AlbumTitle;
-  SongTitle: AlbumTitle;
-}
+  listing: string, // must be a string with partition key of listing //required
+           
+            productImage: 
+               null | Blob,
+          
+                contactHereToPurchase: string,
+                shipping: string | null,//state,
+                Online: boolean,
+                productDescription: String,
+                price: number,    //"₥35" This is the format to display with the Mill symbol 
+          };
 
-type AlbumTitle = {
-  S: string;
-}
+
+
+          // var paras = {
+          //   Item: {
+          //    "AlbumTitle": "Somewhat Famous", 
+          //    "Artist": "No One You Know", 
+          //    "SongTitle":  "Call Me Today"
+              
+          //   }, 
+          //   ReturnConsumedCapacity: "TOTAL", 
+          //   TableName: "Music"
+          //  };
+
 
 // productID: {
 //   S:' productKey'},
