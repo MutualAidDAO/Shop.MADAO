@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { config } from "process";
 
 
 type ReturnType = {
-  // getProducts: () => any[];
+   getProducts: () => any[];
   createProduct: () => void;
 }
 
@@ -14,6 +14,11 @@ export default function useShop(): ReturnType {
     const apiEndP = `https://09zlx4b2rl.execute-api.us-west-2.amazonaws.com/Listings/ListingQuery`
   
 
+
+
+
+    //-----------------------------------------Helpers above--------------
+
   const getProducts = async () => {
 
     // setup the api call to get products
@@ -22,9 +27,44 @@ export default function useShop(): ReturnType {
     // await fetch()
     // get the data from the responce
 
+// Set up the parameters for the DynamoDB Query operation
+// const params = {
+//   TableName: 'Listings',
+//   ExclusiveStartKey: lastEvaluatedKey, // use the last evaluated key for pagination
+//   Limit: 20 // number of items to load per request
+// };
+let lastEvaluatedKey
+
+// Set up the parameters for the DynamoDB Query operation
+const param = {
+  method: 'GET',
+
+  params: {TableName: 'Listings',
+   ExclusiveStartKey: lastEvaluatedKey, // use the last evaluated key for pagination
+   Limit: 20 },
+  headers: {
+    'Content-Type': 'application/json',
+    
+    'x-api-key' : apiKey,
+   
+     'Access-Control-Allow-Origin': '*',},
+    
+  
+};
+    let response = await axios.get(apiEndP, param);
+    
+      
+
+  console.log('response', response);
+ 
+
+
+
+    
+
 
     // return that data(records)
-    return [];
+    return [...response.data.Items];
   }
  
   const createProduct = async (ListedData:Item) => {
@@ -81,7 +121,7 @@ export default function useShop(): ReturnType {
   }
 
   return {
-    // getProducts,
+     getProducts,
     createProduct
   }
 };
@@ -95,6 +135,11 @@ type TableName =   string;
   ReturnConsumedCapacity: string;
   TableName: string;
 }
+// type GetProdBody ={
+//   TableName: string,
+//   ExclusiveStartKey: string, // use the last evaluated key for pagination
+//   Limit: number // number of items to load per request
+// }
 
 type Item = {
   listing: string, // must be a string with partition key of listing //required

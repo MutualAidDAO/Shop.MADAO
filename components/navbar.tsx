@@ -40,14 +40,14 @@ const Navbar: NextPage = () => {
   }, []);
 
     
-  const getWallets = () =>{
+  // const getWallets = () =>{
     
     
-    const wallets = getAvailableWallets()
+  //   const wallets = getAvailableWallets()
 
-    return //PUT MODAL HERE FOR DISPLAYING WALLETS
+  //   return //PUT MODAL HERE FOR DISPLAYING WALLETS
   
-  };
+  // };
 
 
 
@@ -71,7 +71,7 @@ const Navbar: NextPage = () => {
           variant="outlined"
           color="primary"
           size="small"
-          onClick={getWallets}
+         // onClick={getWallets}
         >
           Connect Wallet
         </Button>

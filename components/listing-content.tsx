@@ -2,16 +2,18 @@ import type { NextPage } from "next";
 import { useEffect } from "react";
 
 type ListingContentType = {
-  listingImage?: string;
+  listingImage?: Blob;
   productName?: string;
   price?: string;
 };
 
-const ListingContent: NextPage<ListingContentType> = ({
+const ListingContent: NextPage<ListingContentType> = (ListingsContent:{
   listingImage,
   productName,
   price,
 }) => {
+
+  
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
       "[data-animate-on-scroll]"
