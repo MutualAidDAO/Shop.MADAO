@@ -2,14 +2,14 @@ import type { NextPage } from "next";
 import { useEffect } from "react";
 
 type ListingContentType = {
-  listingImage?: Blob;
-  productName?: string;
+  listingImage?: string;
+  listing?: string;
   price?: string;
 };
 
 const ListingContent: NextPage<ListingContentType> = (ListingsContent:{
   listingImage,
-  productName,
+  listing,
   price,
 }) => {
 
@@ -53,7 +53,7 @@ const ListingContent: NextPage<ListingContentType> = (ListingsContent:{
         data-animate-on-scroll
       />
       <div className="relative inline-block w-[196px] h-[41px] shrink-0">
-        {productName}
+        {listing}
       </div>
       <p className="m-[0] relative text-lg inline-block">{price}</p>
     </div>

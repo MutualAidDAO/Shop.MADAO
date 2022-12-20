@@ -7,7 +7,7 @@ import ListingContent from "../components/listing-content";
 
 
 type ListingContentType = {
-  listingImage?: string;
+  listingImage?: string|null|Blob;
   listing?: string;
   price?: string;
 };
