@@ -1,20 +1,25 @@
 import type { NextPage } from "next";
 import { useEffect } from "react";
 
+//--------------------------------------------------------------
+
 type ListingContentType = {
   listingImage?: string;
   listing?: string;
   price?: string;
 };
 
-const ListingContent: NextPage<ListingContentType> = (ListingsContent:{
+
+//--------------------------------------------------Component Below-------------------------------
+
+const ListingContent: NextPage<ListingContentType> = ({
   listingImage,
   listing,
   price,
 }) => {
 
   
-  useEffect(() => {
+  useEffect(() => { //---------------animation function-------------------------
     const scrollAnimElements = document.querySelectorAll(
       "[data-animate-on-scroll]"
     );
@@ -41,9 +46,13 @@ const ListingContent: NextPage<ListingContentType> = (ListingsContent:{
       for (let i = 0; i < scrollAnimElements.length; i++) {
         observer.unobserve(scrollAnimElements[i]);
       }
-    };
+    };//---------------------------------------------------------------------------
   }, []);
 
+
+
+
+  
   return (
     <div className="flex flex-col items-start justify-start gap-[13px] text-left text-xl text-black font-eb-garamond md:w-full">
       <img
