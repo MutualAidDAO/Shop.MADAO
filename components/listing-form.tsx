@@ -1,6 +1,4 @@
-
-
-import {useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { NextPage } from "next";
 import {
   TextField,
@@ -10,90 +8,115 @@ import {
   IconButton,
   Switch,
 } from "@mui/material";
-import {createProduct} from '../hooks/useShop'
+import useShop from "../hooks/useShop";
+import { useForm } from "react-hook-form";
 
 
 //----------------------------------------------------------------------------------------------
 
-const ListingForm: NextPage = () => {
 
-
-  const [shippingToggle, setShippingToggle] = useState(true);
-  const priceRef = useRef();
-  const productIDRef = useRef();
-  const OnlineRef = useRef();
+type ListingType = {
   
-  const contactRef = useRef();
-  const shippingRef = useRef();
-  const DescRef = useRef();
-  const imageRef = useRef();
+  listing?: string;
+  price?: string;
+  
+ 
+      Contact?: string,
+      shipping?: string|undefined,
+      Online?: boolean,
+      proDesc?: string,
+      image?: Blob;
+    }
+const {createProduct}=useShop()
+
+const ListingForm: NextPage = () => {
+  const [shippingToggle, setShippingToggle] = useState(true);
+
+
+
+  // const priceRef = useRef(null);
+  // const listingRef = useRef(null);
+  // const OnlineRef = useRef(null);
+
+  // const ContactRef = useRef(null);
+  // const shippingRef = useRef(null);
+  // const DescRef = useRef(null);
+  // const imageRef = useRef(null);
+
+
 
   //---------------Helper consts above------------
 
-  const toggleElement = () => {
-    setShippingToggle(prevState => (!prevState))};
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
+  const reader = new FileReader();
 
+  const imgBlobber = async () => {
+    const imgBlob = new Blob([reader.result], { type:
+"image/png" });
+await register("Blob", { value: imgBlob });
+};
+
+reader.onload = imgBlobber;
+ 
   const submitHandler = (event) => {
+   event.preventDefault()
+  
+     
+     
 
-   function imgBlobber () {
-    const reader = new FileReader();
-
-    reader.onload = function imgBlobber () {
-      const imgBlob = new Blob([reader.result], {type: 'image/jpeg'});
-      if (imgBlob.size <= 333333) {
-        // The size of the blob is 333KB
-        return imgBlob
-      } else {
-        // The size of the blob is not 333KB
-
-        return console.log("error on imgblob")
-      }
+    
       
-
       
-    };
+      
+      
+      
+        
+      //imgBlobber();
     
-    reader.readAsArrayBuffer(imageRef.current.value);
-   }
-
-
+      
     
-    event.preventDefault();
 
-    const price = priceRef.current.value;
-    const listing = productIDRef.current.value + "ID" + (Math.random() * 10000).toFixed(0) + "Date" + (Date.now()/1000000).toFixed(0);
-    
-    
-    const contactHereToPurchase = contactRef.current.value;
-    const shipping = shippingRef.current.value;
-    const Online = OnlineRef.current.value;
-    const productDescription = DescRef.current.value;
-    const productImage = imgBlobber() ;
-
+    const price = watch("priceRef");
+    const listing =
+      watch("listingRef") +
+      "ID" +
+      (Math.random() * 10000).toFixed(0) +
+      "Date" +
+      (Date.now() / (1000 * 60 * 60 * 24 * 7)).toFixed(0);
+    const Contact = watch("ContactRef");
+    const shipping = watch("shippingRef");
+    const Online = watch("OnlineRef");
+    const proDesc= watch("DescRef");
+    const productImage = watch("Blob")
+     
+      console.log(productImage)
     const ListedData = {
-      
-  listing,
-  productImage,
-  contactHereToPurchase,
-  shipping,
-  Online,
-  productDescription,
-  
-  price,
+      listing,
+      productImage,
+      Contact,
+      shipping,
+      Online,
+      proDesc,
+      price,
     };
-    createProduct(ListedData);
-   
-  }
 
-  
+    if (JSON.stringify(ListedData).length < 390 * 1024) {
+      return createProduct(ListedData);
+    } else {
+      console.log(
+        "toast error about size requirements",
+        JSON.stringify(ListedData).length
+      );
+    }}
     
-  
-  
-  
+
+  // useEffect(() =>{
+  //   imgBlobber()
+  // },[])
   
   return (
-    <form onSubmit={submitHandler} className="self-stretch bg-gray-100 h-[601px] shrink-0 flex flex-col p-[29px_13px_60px] box-border items-center justify-start gap-[18px] lg:w-full md:h-[60%] md:pb-[650px] md:box-border">
+    <form className="self-stretch bg-gray-100 h-[601px] shrink-0 flex flex-col p-[29px_13px_60px] box-border items-center justify-start gap-[18px] lg:w-full md:h-[60%] md:pb-[650px] md:box-border">
       <div className="self-stretch flex flex-row items-start justify-start gap-[705px] lg:w-full lg:gap-[25%] md:w-full md:flex-col md:pl-[0px] md:pt-[0px] md:box-border md:gap-[15px]">
         <div className="relative w-[251px] h-[155px] shrink-0">
           <TextField
@@ -106,8 +129,8 @@ const ListingForm: NextPage = () => {
             size="medium"
             margin="none"
             required
-            ref={priceRef}
-          />
+            {...register("priceRef")}
+          />{errors.priceRef && <span>This field is required</span>}
           <TextField
             className="[border:none] bg-[transparent] absolute top-[0px] left-[0px]"
             sx={{ width: 251 }}
@@ -119,30 +142,29 @@ const ListingForm: NextPage = () => {
             size="medium"
             margin="none"
             required
-            ref={productIDRef}
-          />
+            {...register("listingRef")}
+          />{errors.listingRef && <span>This field is required</span>}
         </div>
         <div className="relative w-[437px] h-[215px] shrink-0">
-
-        <input
-            className="absolute top-[0px] left-[0px] bg-gray-400 w-[382px] h-[47px]"
+          <h4 className=" w-5/6">Max File about ~250KB '.PNG files only'</h4>
+          <input
+            className="absolute top-[0px] left-[0px] bg-gray-400 w-[382px] h-[60px]"
             type="file"
             //required
-            ref={imageRef}
-          />
             
+          />{errors.imageRef && <span>This field is required</span>}
+
           <FormControlLabel
             className="absolute top-[65px] left-[0px]"
             label="Online Service/Digital Deliverable"
             labelPlacement="end"
             control={<Switch color="primary" size="medium" />}
-           // hidechild= ternarydata ? "stringdata" : true //-=----Edit to show/hide radio in data and blowUpContent for DB send
-            onChange={toggleElement}
-           ref={OnlineRef}
-          />
-              
+            // hidechild= ternarydata ? "stringdata" : true //-=----Edit to show/hide radio in data and blowUpContent for DB send
             
-            <TextField
+            {...register("OnlineRef", {onChange:()=>{ setShippingToggle(!shippingToggle)}})}
+          />{errors.OnlineRef && <span>This field is required</span>}
+
+          <TextField
             className="[border:none] bg-[transparent] absolute top-[112px] left-[0px]"
             sx={{ width: 382 }}
             color="primary"
@@ -152,15 +174,11 @@ const ListingForm: NextPage = () => {
             placeholder="Shipping Costs"
             size="medium"
             margin="none"
-            ref={shippingRef}
+            {...register("shippingRef")}
             disabled={!shippingToggle}
             required={shippingToggle}
-            
-          /> 
-          
-          
-          
-            
+          />{errors.shippingRef && <span>This field is required</span>}
+
           <TextField
             className="[border:none] bg-[transparent] absolute top-[173px] left-[0px]"
             sx={{ width: 382 }}
@@ -172,8 +190,8 @@ const ListingForm: NextPage = () => {
             size="medium"
             margin="none"
             required
-            ref={contactRef}
-          />
+            {...register("ContactRef")}
+          />{errors.ContactRef && <span>This field is required</span>}
         </div>
       </div>
       <TextField
@@ -187,13 +205,24 @@ const ListingForm: NextPage = () => {
         placeholder="Product Description"
         margin="dense"
         required
-        ref={DescRef}
-      />
-      <IconButton color="primary" disabled  >
+        {...register("DescRef")}
+      />{errors.DescRef && <span>This field is required</span>}
+      <IconButton
+        type="submit"
+        onClick={handleSubmit(submitHandler)}
+        color="primary"
+        className=" top-[-50px]"
+        disabled={false}
+      >
+        <p>
+          Max listing request size is 399,360 string length, about 400KB. This
+          includes all characters you type in the text and your image file. Plus
+          a boolean and the XML syntax that are about 90 units
+        </p>
         <Icon>send_sharp</Icon>
       </IconButton>
     </form>
-  );
-};
+  )};
+
 
 export default ListingForm;

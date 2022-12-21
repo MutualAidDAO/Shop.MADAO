@@ -7,14 +7,23 @@ import ListingContent from "../components/listing-content";
 
 //type handler = () => {}  This is cool becuase it's the first complicated application of type I've used
 
-type ListingContentType = {
-  listingImage?: string|null|Blob;
-  listing?: string;
-  price?: string;
-};
+type Listing = {
+  listing?:string,
+  productImage?: 
+             null | Blob |string,
+        
+              Contact?: string,
+              shipping?: string | null,
+              Online?: boolean,
+              proDesc?: string,
+              price?: number,
+}
+type ListingBackgroundProps = {
+  Listing:Listing
+  // Other props for the component
+}
 
-
-const ListingBackground: NextPage= ( ListingsContent:{
+const ListingBackground: NextPage<ListingBackgroundProps>= ( Listing:{
   listingImage,
   listing,
   price,
@@ -23,17 +32,17 @@ const ListingBackground: NextPage= ( ListingsContent:{
 
    //trigger into the product.[listing] page
    const ContentHandler = () =>{
-    Router.push('/' + ListingsContent.listing )
+    Router.push('/' + Listing.listing )
   }
 
   return (
-    <div onClick={ContentHandler} className="bg-gray-100 w-[250px] shrink-0 flex flex-row p-[20px_20px_48px] box-border items-start justify-start text-left text-xl text-black font-eb-garamond md:w-full">
+    <div onClick={ContentHandler} className="bg-gray-100 w-[250px] m-4 shrink-0 flex flex-row p-[20px_20px_48px] box-border items-start justify-start text-left text-xl text-black font-eb-garamond md:w-full">
       <ListingContent
       
         
-        listingImage={URL.createObjectURL(ListingsContent.listingImage)}
-        listing= {ListingsContent.listing}
-        price={`₥ ${ListingsContent.price}`}
+        listingImage={Listing.listingImage ? (URL.createObjectURL(Listing.listingImage)):("../rectangle-11@2x.png")}
+        listing= {Listing.listing}
+        price={`₥ ${Listing.price}`}
       />
     </div>
   );

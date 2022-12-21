@@ -1,11 +1,20 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { config } from "process";
+import { useSelector } from "react-redux";
 
+
+//--------------------------------------------------------------------------------
 
 type ReturnType = {
    getProducts: () => any[];
-  createProduct: () => void;
+  createProduct: (ListedData) => void;
+  getOneListing: (listing) => any;
 }
+type productsArray = [
+  {
+    Item:Item
+  },
+]
 
 export default function useShop(): ReturnType {
   
@@ -19,6 +28,29 @@ export default function useShop(): ReturnType {
 
     //-----------------------------------------Helpers above--------------
 
+
+
+
+    const getOneListing = async (IDpunchout:string) => {  //-----------------Gets the information from a loaded item in the redux store based on listing key
+
+
+     const productsArray = useSelector((state: any) => state.products); //----Get array of objects from client store
+     console.log(productsArray)
+      const ProductsObj = productsArray.reduce((prodArr,innerProdKey) => {
+        prodArr[innerProdKey.listing] = innerProdKey;
+        return prodArr;
+
+      },{});
+      console.log(ProductsObj);
+      const KeyID = IDpunchout;
+      console.log(KeyID)
+      if(KeyID in ProductsObj) {
+        const listing = ProductsObj[KeyID];
+         return listing
+      }
+      
+    };
+
   const getProducts = async () => {
 
     // setup the api call to get products
@@ -27,12 +59,7 @@ export default function useShop(): ReturnType {
     // await fetch()
     // get the data from the responce
 
-// Set up the parameters for the DynamoDB Query operation
-// const params = {
-//   TableName: 'Listings',
-//   ExclusiveStartKey: lastEvaluatedKey, // use the last evaluated key for pagination
-//   Limit: 20 // number of items to load per request
-// };
+
 let lastEvaluatedKey
 
 // Set up the parameters for the DynamoDB Query operation
@@ -51,20 +78,22 @@ const param = {
     
   
 };
+
+
     let response = await axios.get(apiEndP, param);
     
       
 
-  console.log('response', response);
+  //console.log('response', response);
  
+lastEvaluatedKey = response.data.LastEvaluatedKey
 
 
-
-    
+    console.log('Data is Here!', response.data.Items)
 
 
     // return that data(records)
-    return [...response.data.Items];
+    return {...response.data};
   }
  
   const createProduct = async (ListedData:Item) => {
@@ -79,13 +108,13 @@ const param = {
                ListedData.productImage,
             
         
-                contactHereToPurchase:
+                Contact:
                   
-                ListedData.contactHereToPurchase,
+                ListedData.Contact,
                 shipping: ListedData.shipping ,
                 
                 Online: ListedData.Online,//state,
-                productDescription: ListedData.productDescription,
+                proDesc: ListedData.proDesc,
                 price: ListedData.price,    //"₥35" This is the format to display with the Mill symbol 
           },
           ReturnConsumedCapacity: "TOTAL", 
@@ -122,7 +151,8 @@ const param = {
 
   return {
      getProducts,
-    createProduct
+    createProduct,
+    getOneListing
   }
 };
 
@@ -135,11 +165,6 @@ type TableName =   string;
   ReturnConsumedCapacity: string;
   TableName: string;
 }
-// type GetProdBody ={
-//   TableName: string,
-//   ExclusiveStartKey: string, // use the last evaluated key for pagination
-//   Limit: number // number of items to load per request
-// }
 
 type Item = {
   listing: string, // must be a string with partition key of listing //required
@@ -147,25 +172,14 @@ type Item = {
             productImage: 
                null | Blob,
           
-                contactHereToPurchase: string,
+                Contact: string,
                 shipping: string | null,//state,
                 Online: boolean,
-                productDescription: String,
+                proDesc: String,
                 price: number,    //"₥35" This is the format to display with the Mill symbol 
           };
 
 
-
-          // var paras = {
-          //   Item: {
-          //    "AlbumTitle": "Somewhat Famous", 
-          //    "Artist": "No One You Know", 
-          //    "SongTitle":  "Call Me Today"
-              
-          //   }, 
-          //   ReturnConsumedCapacity: "TOTAL", 
-          //   TableName: "Music"
-          //  };
 
 
 // productID: {
@@ -174,9 +188,9 @@ type Item = {
 // S: 'productKey'}
 // ,
 // productName:{ "CopyMeme"},
-// contactHereToPurchase:{S: `Contact shael to purchase`},
+// Contact:{S: `Contact shael to purchase`},
 // shippingOnline: {S: "Shipping/Online(boolean)"},//stateful,
-// productDescription:{S: "Copywriting/MemeMaking"},
+// proDesc:{S: "Copywriting/MemeMaking"},
 // price:{N: 25} ,  //"₥25"
 // },
 // ReturnConsumedCapacity: "TOTAL", 

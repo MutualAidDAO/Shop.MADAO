@@ -1,79 +1,202 @@
+
+// import ListingBackground from "../components/listing-background";
+// //import Router from "next/router"
+
 import type { NextPage } from "next";
+import { useEffect } from "react";
+//import { createStore } from "redux";
+import { Provider, useSelector, useDispatch } from "react-redux";
 import ListingBackground from "../components/listing-background";
-import Router from "next/router"
-import {useState, useEffect} from "react"
-
-
+import Sorry from '../components/sorry'
 import useShop from '../hooks/useShop'
 
-
-//----------------------------------------------------------------------------
-
-let loading = false; // flag to prevent multiple load requests
-let lastEvaluatedKey; // variable to store the last evaluated key for pagination
-const {getProducts} = useShop();
+import { store } from "../store";
 
 
-const[products,setProducts] = useState(getProducts);
+// //----------------------------------------------------------------------------
 
-//---------------------------------AI Gen Code below------------------------------
+ 
+ const {getProducts} = useShop();
+
+
+
+ type Listing = {
+  listing?:string,
+  productImage?: 
+             null | Blob |string,
+        
+              Contact?: string,
+              shipping?: string | null,
+              Online?: boolean,
+              proDesc?: string,
+              price?: number,
+}
+
+type productsArray = [
+ Listing ,
+] | null
+
+const LOAD_PRODUCTS = "LOAD_PRODUCTS";
+const Key="KEY";
+const Count = "COUNT";
+
+
+
+
+
+
+// //-------------------------------------------------------Component below--------------
+
+
+
+const ListingsView: NextPage = () => {
   
-async function loadMoreItems() {
- 
-  if (loading) {
-    return;
-  }
-
-  loading = true;
-
- 
-
-     const data = await getProducts()
-
-    // Append the new items to the page
-    // data.Items.forEach(item => {
-    //   // const element = document.createElement('div');
-    //   // element.innerHTML = `<p>${item.name}</p><p>${item.description}</p>`;
-    //   // document.getElementById('items').appendChild(element);
-    // });
-    
-    // Update the last evaluated key and loading flag
-    lastEvaluatedKey = data.LastEvaluatedKey;
-    loading = false;
-  setProducts([...products,...data]);
-    return products
-  };
 
 
-// Attach the loadMoreItems function to the scroll event of the window
+
+  //----------------------loading and pagination Logic------------------------
+  const dispatch = useDispatch();
+let loading = false;
+const loadMoreItems = async () => {
+  
+if (loading) {
+return;
+}
+
+loading = true;
+
+const data = await getProducts();
+//console.log(data);
+dispatch({
+  type: Key,
+  payload: data.LastEvaluatedKey
+  });
+  
+dispatch({
+    type: Count,
+    payload: data.Count
+    });
+
+dispatch({
+type: LOAD_PRODUCTS,
+payload: data.Items
+});
+
+};
+//---------infinite pagination--------Deprecated-------------------
+// if (process.browser) {
+// window.addEventListener("scroll", () => {
+// if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+// loadMoreItems();
+// }
+// });
+// }
+//------------another deprecated pagination---------------
+// const observer = new IntersectionObserver((entries) => {
+//   if (entries[0].isIntersecting) {
+//     loadMoreItems();
+//   }
+// });
+
+// observer.observe(document.querySelector('#load-more-trigger'));
+
+// Load the first set of items
+useEffect(() =>{
+  loadMoreItems();
+},[])
+
+//--------------Limiter to the pagination, without this the page assaults the backend nonstop------------------------
+
 if (process.browser) {
-  window.addEventListener('scroll', () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+  window.addEventListener("scroll", () => {
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    //
+    if (!(hasMore == null) && window.scrollY >= maxScroll) {
       loadMoreItems();
     }
   });
 }
 
+const products = useSelector((state: any) => state.products);
+  const hasMore = useSelector((state: string|null) => state.Key);
 
-// Load the first set of items
-loadMoreItems();
-//-------------------------AI Gen Code above------------------------
+return (
+<Provider store={store} >
+<div className="self-stretch flex-1 bg-gray-300 flex flex-row p-[10px] box-border items-start justify-start min-h-[700] text-left text-xl text-black font-eb-garamond">
+{products ? (
+products.map((product:Listing) => {
+  return <ListingBackground key={product.listing} Listing={product} />;
+  })
+  ) : (
+  <Sorry />
+  )}
+  
+  </div> </Provider>
+  
+)
+  };
+  export default ListingsView;
+// //---------------------------------AI Gen Code below------------------------------Deprecated below---------------------
+  
+// type productsArray = [
+//   {
+//     listing:string,
+//     productImage: 
+//                null | Blob,
+          
+//                 contactHereToPurchase: string,
+//                 shipping: string | null,
+//                 Online: boolean,
+//                 productDescription: string,
+//                 price: number,
+//   },
+// ] | null
+
+// const [products,setProducts]=useState()
+// //let products:productsArray[] = null
+// async function loadMoreItems() {
+  
+//   if (loading) {
+//     return;
+//   }
+
+//   loading = true;
+
+ 
+
+//      const data = await getProducts()
+//     console.log(data)
+    
+    
+     
+//     // Update the last evaluated key and loading flag
+//     lastEvaluatedKey = data.LastEvaluatedKey;
+//     loading = false;
+//   // const setProducts= ((newProducts) => {
+//   //   if (products === null){
+//   //     return [...newProducts]
+//   //   } else {
+//   //   return  [...products, ...newProducts]
+//   // }});
+//   setProducts((prevState) => {
+//     return [...prevState, ...data];
+//   });
+//   //products = setProducts(data)
+//   console.log(products)
+//     return products
+//   };
 
 
-//-------------------------------------------------------Component below--------------
-const ListingsView: NextPage = () => {
+// // Attach the loadMoreItems function to the scroll event of the window
+// if (process.browser) {
+//   window.addEventListener('scroll', () => {
+//     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+//       loadMoreItems();
+//     }
+//   });
+// }
 
 
-   
-  return (
-    <div className="self-stretch flex-1 bg-gray-300 flex flex-row p-[10px] box-border items-start justify-start min-h-[700] text-left text-xl text-black font-eb-garamond">
-      
-      {products.map((product) => {
-        
-       <ListingBackground key= {product.listing} ListingsContent={product} />
-      })}
-    </div>
-  );
-};
-
-export default ListingsView;
+// // Load the first set of items
+// loadMoreItems();
+//-----------------------------------------------Deprecated above-------------------------------

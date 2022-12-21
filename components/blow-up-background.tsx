@@ -2,14 +2,35 @@ import type { NextPage } from "next";
 import { useEffect } from "react";
 import { Icon, IconButton } from "@mui/material";
 import BlowUpContent from "../components/blow-up-content";
-
+import { useSelector } from "react-redux";
 
 //------------------------------------------------------------------------
-const BlowUpBackground: NextPage = (props) => {
+
+type ListingType = {
+  
+  listing?: string;
+  price?: string;
+  
+ 
+      Contact?: string,
+      shipping?: string|undefined,
+      Online?: boolean,
+      proDesc?: string,
+      image?: Blob;
+    }
+type ListingProps = {
+  Listing:ListingType
+  // Other props for the component
+}
 
 
+const BlowUpBackground: NextPage<ListingType> = (Listing) => {
 
-  useEffect(() => {
+  
+  
+  
+
+  useEffect(() => {//--------------------------------------------------Code for some animation-------------
     const scrollAnimElements = document.querySelectorAll(
       "[data-animate-on-scroll]"
     );
@@ -56,16 +77,17 @@ const BlowUpBackground: NextPage = (props) => {
   return (
     <div className="flex-1 bg-gray-100 h-[667px] flex flex-row p-[20px_20px_48px] box-border items-start justify-start gap-[10px] text-left text-lg text-black font-eb-garamond md:flex-col sm:max-w-[100vw]">
       <BlowUpContent
-        productName="Product Name"
-        contactHereToPurchase={`Contact here to purchase`}
-        shippingOnline="Shipping/Online(boolean)"state
-        productDescription="Product Description"
-        price="₥~~~"
+        listing={Listing.listing}
+        contactHereToPurchase={Listing.Contact}
+        shipping={Listing.shipping}
+        Online={Listing.Online}
+        productDescription={Listing.proDesc}
+        price={`₥ ${Listing.price}`}
       />
       <img
         className="self-stretch relative max-h-full w-[616px] shrink-0 object-cover [&.animate]:animate-[1s_ease_0s_1_normal_forwards_slide-in-top] opacity-[0] md:w-full md:max-h-[50%] sm:max-h-[50%] sm:max-w-full"
         alt=""
-        src="../rectangle-111@2x.png"
+        src={Listing.Image ? URL.createObjectURL(Listing.image) : "../rectangle-111@2x.png"}
         data-animate-on-scroll
       />
       <IconButton color="primary">

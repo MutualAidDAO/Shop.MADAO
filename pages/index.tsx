@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
-
+import { Provider } from "react-redux";
+import { store } from "../store";
 import ListingViewBackground from "../components/listing-view-background";
 //----------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ const Index: NextPage = () => {
    
  
 
-  return (
+  return ( <Provider store={store} >
     <div className="relative bg-blue w-screen h-screen flex flex-col items-start justify-start gap-[0px] md:h-screen md:w-screen md:min-h-[950]">
       
 
@@ -66,7 +67,7 @@ const Index: NextPage = () => {
       
       
       
-    </div>
+    </div></Provider>
   );
 };
 

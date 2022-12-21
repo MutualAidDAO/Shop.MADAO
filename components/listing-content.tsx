@@ -57,12 +57,12 @@ const ListingContent: NextPage<ListingContentType> = ({
     <div className="flex flex-col items-start justify-start gap-[13px] text-left text-xl text-black font-eb-garamond md:w-full">
       <img
         className="relative w-[199px] h-[108px] shrink-0 object-cover [&.animate]:animate-[1s_ease_0s_1_normal_forwards_slide-in-top] opacity-[0] md:w-full"
-        alt=""
+        alt={listing}
         src={listingImage}
         data-animate-on-scroll
       />
       <div className="relative inline-block w-[196px] h-[41px] shrink-0">
-        {listing}
+        <p>{listing}</p>
       </div>
       <p className="m-[0] relative text-lg inline-block">{price}</p>
     </div>
