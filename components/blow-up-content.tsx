@@ -1,4 +1,12 @@
 import type { NextPage } from "next";
+import { Provider } from "react-redux";
+import { store } from "../store";
+
+
+
+//---------------------------------------------------------------------------
+
+
 
 type BlowUpContentType = {
   listing?: string;
@@ -18,7 +26,7 @@ const BlowUpContent: NextPage<BlowUpContentType> = ({
   productDescription,
   price,
 }) => {
-  return (
+  return ( <Provider store={store} >
     <div className="self-stretch flex flex-col items-start justify-start gap-[13px] text-left text-lg text-black font-eb-garamond">
       <div className="relative text-xl inline-block w-[196px] h-[41px] shrink-0">
         {listing}
@@ -27,7 +35,7 @@ const BlowUpContent: NextPage<BlowUpContentType> = ({
       <div className="relative inline-block">{contactHereToPurchase}</div>
       <div className="relative inline-block">{shipping || Online}</div>
       <div className="relative inline-block">{productDescription}</div>
-    </div>
+    </div></Provider>
   );
 };
 

@@ -1,27 +1,49 @@
 import type { NextPage } from "next";
 import  {useRouter}  from "next/router"
-import useShop from "../../hooks/useShop";
+
 import BlowUpViewBackground from "../../components/blow-up-view-background";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { store } from "../../store";
 
 
 //-----------------------------------------------------------------------------------------------
 
 
-const {getOneListing} = useShop();
+const getOneListing = async (IDpunchout:string) => {  //-----------------Gets the information from a loaded item in the redux store based on listing key
+
+
+  const productsArray = useSelector((state: any) => state.products); //----Get array of objects from client store
+  console.log(productsArray)
+   const ProductsObj = productsArray.reduce((prodArr,innerProdKey) => {
+     prodArr[innerProdKey.listing] = innerProdKey;
+     return prodArr;
+
+   },{});
+   console.log(ProductsObj);
+   const KeyID = IDpunchout;
+   console.log(KeyID)
+   if(KeyID in ProductsObj) {
+     const listing = ProductsObj[KeyID];
+      return listing
+   } else {console.log('error in the getOneListing')}
+   
+ };
 
 
 
 const ProductBlowUp: NextPage = () => {
   const router = useRouter();
-  const oneListing = getOneListing(router.query.listing);
+  let oneListing
+  if(router.query.listing){
+     oneListing = getOneListing(router.query.listing);
+  }
+  
 
 
   return (<Provider store={store}>
     <div className="relative bg-blue w-full h-screen flex flex-col items-start justify-start gap-[0px]">
       
-      <BlowUpViewBackground listingContent={oneListing} />
+      <BlowUpViewBackground ListingContent={oneListing} />
       
     </div></Provider>
   );

@@ -2,7 +2,9 @@ import type { NextPage } from "next";
 import { useEffect } from "react";
 import { Icon, IconButton } from "@mui/material";
 import BlowUpContent from "../components/blow-up-content";
-import { useSelector } from "react-redux";
+import { Provider, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { store } from "../store";
 
 //------------------------------------------------------------------------
 
@@ -16,7 +18,7 @@ type ListingType = {
       shipping?: string|undefined,
       Online?: boolean,
       proDesc?: string,
-      image?: Blob;
+      productImage?: Blob;
     }
 type ListingProps = {
   Listing:ListingType
@@ -24,9 +26,13 @@ type ListingProps = {
 }
 
 
-const BlowUpBackground: NextPage<ListingType> = (Listing) => {
 
-  
+
+const BlowUpBackground: NextPage<ListingType> = (Listing:ListingType) => {
+  const router = useRouter();
+  const closeHandler = () =>{
+    router.push('/');
+  };
   
   
 
@@ -74,7 +80,7 @@ const BlowUpBackground: NextPage<ListingType> = (Listing) => {
   // } = listingContent;
 
 
-  return (
+  return ( <Provider  store={store} >
     <div className="flex-1 bg-gray-100 h-[667px] flex flex-row p-[20px_20px_48px] box-border items-start justify-start gap-[10px] text-left text-lg text-black font-eb-garamond md:flex-col sm:max-w-[100vw]">
       <BlowUpContent
         listing={Listing.listing}
@@ -87,13 +93,13 @@ const BlowUpBackground: NextPage<ListingType> = (Listing) => {
       <img
         className="self-stretch relative max-h-full w-[616px] shrink-0 object-cover [&.animate]:animate-[1s_ease_0s_1_normal_forwards_slide-in-top] opacity-[0] md:w-full md:max-h-[50%] sm:max-h-[50%] sm:max-w-full"
         alt=""
-        src={Listing.Image ? URL.createObjectURL(Listing.image) : "../rectangle-111@2x.png"}
+        src={Listing.productImage ? URL.createObjectURL(Listing.productImage) : "../rectangle-111@2x.png"}
         data-animate-on-scroll
       />
-      <IconButton color="primary">
+      <IconButton color="primary" onClick={closeHandler}>
         <Icon>arrow_back_ios_sharp</Icon>
       </IconButton>
-    </div>
+    </div></Provider>
   );
 };
 

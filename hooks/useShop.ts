@@ -47,7 +47,7 @@ export default function useShop(): ReturnType {
       if(KeyID in ProductsObj) {
         const listing = ProductsObj[KeyID];
          return listing
-      }
+      } else {console.log('error in the getOneListing')}
       
     };
 

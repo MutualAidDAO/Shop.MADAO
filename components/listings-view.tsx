@@ -23,7 +23,7 @@ import { store } from "../store";
  type Listing = {
   listing?:string,
   productImage?: 
-             null | Blob |string,
+             null | Blob ,
         
               Contact?: string,
               shipping?: string | null,
@@ -105,9 +105,9 @@ useEffect(() =>{
   loadMoreItems();
 },[])
 
-//--------------Limiter to the pagination, without this the page assaults the backend nonstop------------------------
 
-if (process.browser) {
+
+if (process.browser) {    //--------------Limiter to the pagination, without this the page assaults the backend nonstop------------------------
   window.addEventListener("scroll", () => {
     const maxScroll = document.body.scrollHeight - window.innerHeight;
     //
@@ -122,9 +122,10 @@ const products = useSelector((state: any) => state.products);
 
 return (
 <Provider store={store} >
-<div className="self-stretch flex-1 bg-gray-300 flex flex-row p-[10px] box-border items-start justify-start min-h-[700] text-left text-xl text-black font-eb-garamond">
+<div className="self-stretch flex-1 bg-gray-300 flex flex-row p-[10px] box-border items-start justify-start min-h-[700] text-left text-xl text-black font-eb-garamond flex-wrap">
 {products ? (
 products.map((product:Listing) => {
+  console.log(product)
   return <ListingBackground key={product.listing} Listing={product} />;
   })
   ) : (

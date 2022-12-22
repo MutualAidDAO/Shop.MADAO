@@ -10,7 +10,7 @@ import ListingContent from "../components/listing-content";
 type Listing = {
   listing?:string,
   productImage?: 
-             null | Blob |string,
+             null | Blob ,
         
               Contact?: string,
               shipping?: string | null,
@@ -23,13 +23,9 @@ type ListingBackgroundProps = {
   // Other props for the component
 }
 
-const ListingBackground: NextPage<ListingBackgroundProps>= ( Listing:{
-  listingImage,
-  listing,
-  price,
-}) => {
+const ListingBackground: NextPage<ListingBackgroundProps>= ( key, Listing:Listing) => {
  
-
+console.log(Listing)
    //trigger into the product.[listing] page
    const ContentHandler = () =>{
     Router.push('/' + Listing.listing )
@@ -40,7 +36,7 @@ const ListingBackground: NextPage<ListingBackgroundProps>= ( Listing:{
       <ListingContent
       
         
-        listingImage={Listing.listingImage ? (URL.createObjectURL(Listing.listingImage)):("../rectangle-11@2x.png")}
+        listingImage={Listing.productImage ? (URL.createObjectURL(Listing.productImage)):("../rectangle-11@2x.png")}
         listing= {Listing.listing}
         price={`₥ ${Listing.price}`}
       />

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import useShop from "../hooks/useShop";
 import { useForm } from "react-hook-form";
+// import { FileReader} from 'filereader'
 
 
 //----------------------------------------------------------------------------------------------
@@ -47,27 +48,29 @@ const ListingForm: NextPage = () => {
 
   //---------------Helper consts above------------
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, watch, formState: { errors }, getValues } = useForm();
 
-  const reader = new FileReader();
+  
 
-  const imgBlobber = async () => {
-    const imgBlob = new Blob([reader.result], { type:
-"image/png" });
-await register("Blob", { value: imgBlob });
-};
 
-reader.onload = imgBlobber;
  
   const submitHandler = (event) => {
-   event.preventDefault()
+   //event.preventDefault()
   
      
-     
+     const file = watch("image");
 
+   const reader = new FileReader();
+
+   const imgBlobber = (file) => {
+ 
     
-      
-      
+     const imgBlob = new Blob([file], { type: "image/png" });
+  register("Blob", { value: imgBlob });
+  return reader.readAsArrayBuffer(imgBlob); 
+ };
+ reader.onload = imgBlobber(file);
+     
       
       
       
@@ -80,7 +83,7 @@ reader.onload = imgBlobber;
     const price = watch("priceRef");
     const listing =
       watch("listingRef") +
-      "ID" +
+      "||ID" +
       (Math.random() * 10000).toFixed(0) +
       "Date" +
       (Date.now() / (1000 * 60 * 60 * 24 * 7)).toFixed(0);
@@ -88,7 +91,7 @@ reader.onload = imgBlobber;
     const shipping = watch("shippingRef");
     const Online = watch("OnlineRef");
     const proDesc= watch("DescRef");
-    const productImage = watch("Blob")
+    const productImage = getValues("Blob")
      
       console.log(productImage)
     const ListedData = {
@@ -102,6 +105,7 @@ reader.onload = imgBlobber;
     };
 
     if (JSON.stringify(ListedData).length < 390 * 1024) {
+      console.log(ListedData)  //---------------------------------DEBUG ERRORS (Too large img, too large request, no @ in Contact, )
       return createProduct(ListedData);
     } else {
       console.log(
@@ -116,7 +120,7 @@ reader.onload = imgBlobber;
   // },[])
   
   return (
-    <form className="self-stretch bg-gray-100 h-[601px] shrink-0 flex flex-col p-[29px_13px_60px] box-border items-center justify-start gap-[18px] lg:w-full md:h-[60%] md:pb-[650px] md:box-border">
+    <form onSubmit={handleSubmit(submitHandler)} className="self-stretch bg-gray-100 h-[601px] shrink-0 flex flex-col p-[29px_13px_60px] box-border items-center justify-start gap-[18px] lg:w-full md:h-[60%] md:pb-[650px] md:box-border">
       <div className="self-stretch flex flex-row items-start justify-start gap-[705px] lg:w-full lg:gap-[25%] md:w-full md:flex-col md:pl-[0px] md:pt-[0px] md:box-border md:gap-[15px]">
         <div className="relative w-[251px] h-[155px] shrink-0">
           <TextField
@@ -147,19 +151,21 @@ reader.onload = imgBlobber;
         </div>
         <div className="relative w-[437px] h-[215px] shrink-0">
           <h4 className=" w-5/6">Max File about ~250KB '.PNG files only'</h4>
-          <input
+          <input  //---------------------------------------------------------------------------FILE UPLOAD INPUT---------
             className="absolute top-[0px] left-[0px] bg-gray-400 w-[382px] h-[60px]"
             type="file"
             //required
-            
-          />{errors.imageRef && <span>This field is required</span>}
+            accept="image/png"
+            {...register("image")}
+            />
+           {/* {errors.imageRef && <span>This field is required</span>} */}
 
           <FormControlLabel
             className="absolute top-[65px] left-[0px]"
             label="Online Service/Digital Deliverable"
             labelPlacement="end"
             control={<Switch color="primary" size="medium" />}
-            // hidechild= ternarydata ? "stringdata" : true //-=----Edit to show/hide radio in data and blowUpContent for DB send
+            
             
             {...register("OnlineRef", {onChange:()=>{ setShippingToggle(!shippingToggle)}})}
           />{errors.OnlineRef && <span>This field is required</span>}
@@ -209,7 +215,7 @@ reader.onload = imgBlobber;
       />{errors.DescRef && <span>This field is required</span>}
       <IconButton
         type="submit"
-        onClick={handleSubmit(submitHandler)}
+        
         color="primary"
         className=" top-[-50px]"
         disabled={false}
