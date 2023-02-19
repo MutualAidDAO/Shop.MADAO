@@ -7,12 +7,14 @@ type ListingContentType = {
   listingImage?: string;
   listing?: string;
   price?: string;
+  key:string
 };
 
 
 //--------------------------------------------------Component Below-------------------------------
 
 const ListingContent: NextPage<ListingContentType> = ({
+  key,
   listingImage,
   listing,
   price,
@@ -54,7 +56,7 @@ const ListingContent: NextPage<ListingContentType> = ({
 
   
   return (
-    <div className="flex flex-col items-start justify-start gap-[13px] text-left text-xl text-black font-eb-garamond md:w-full">
+    <div key={key} className="flex flex-col items-start justify-start gap-[13px] text-left text-xl text-black font-eb-garamond md:w-full">
       <img
         className="relative w-[199px] h-[108px] shrink-0 object-cover [&.animate]:animate-[1s_ease_0s_1_normal_forwards_slide-in-top] opacity-[0] md:w-full"
         alt={listing}

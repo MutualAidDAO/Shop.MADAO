@@ -41,7 +41,24 @@ const Key="KEY";
 const Count = "COUNT";
 
 
+type DataAWS = {
+  Items: Item[],
+  Count: number,
+  ScannedCount: number,
+}
 
+type Item = {
+  shipping: string,
+  Online: boolean,
+  listing: string,
+  price: string,
+  proDesc: string,
+  productImage: ProductImage,
+  Contact: string,
+}
+
+type ProductImage = {
+}
 
 
 
@@ -49,7 +66,7 @@ const Count = "COUNT";
 
 
 
-const ListingsView: NextPage = () => {
+const ListingsView = () => {
   
 
 
@@ -65,7 +82,7 @@ return;
 
 loading = true;
 
-const data = await getProducts();
+const data  = await getProducts() as DataAWS;
 //console.log(data);
 dispatch({
   type: Key,

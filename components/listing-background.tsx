@@ -19,11 +19,12 @@ type Listing = {
               price?: number,
 }
 type ListingBackgroundProps = {
+  key: string,
   Listing:Listing
   // Other props for the component
 }
 
-const ListingBackground: NextPage<ListingBackgroundProps>= ( key, Listing:Listing) => {
+const ListingBackground: NextPage<ListingBackgroundProps>= ( {key, Listing}) => {
  
 console.log(Listing)
    //trigger into the product.[listing] page
@@ -34,7 +35,7 @@ console.log(Listing)
   return (
     <div onClick={ContentHandler} className="bg-gray-100 w-[250px] m-4 shrink-0 flex flex-row p-[20px_20px_48px] box-border items-start justify-start text-left text-xl text-black font-eb-garamond md:w-full">
       <ListingContent
-      
+        key={key}
         
         listingImage={Listing.productImage ? (URL.createObjectURL(Listing.productImage)):("../rectangle-11@2x.png")}
         listing= {Listing.listing}
@@ -45,3 +46,5 @@ console.log(Listing)
 };
 
 export default ListingBackground;
+
+

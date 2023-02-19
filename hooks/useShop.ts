@@ -5,16 +5,38 @@ import { useSelector } from "react-redux";
 
 //--------------------------------------------------------------------------------
 
-type ReturnType = {
-   getProducts: () => any[];
-  createProduct: (ListedData) => void;
-  getOneListing: (listing) => any;
+
+
+type DataAWS = {
+  Items: ListingData[],
+  Count: number,
+  ScannedCount: number,
+  LastEvaluatedKey?:string
 }
-type productsArray = [
-  {
-    Item:Item
-  },
-]
+
+type ListingData = {
+  shipping: string,
+  Online: boolean,
+  listing: string,
+  price: string,
+  proDesc: string,
+  productImage: ProductImage,
+  Contact: string,
+}
+
+type ProductImage = {}
+
+
+type ReturnType = {
+   getProducts: () => DataAWS;
+  createProduct: (ListedData:ListingData) => void;
+  getOneListing: (listing:any) => any;
+}
+// type productsArray = [
+//   {
+//     Item:Item
+//   },
+// ]
 
 export default function useShop(): ReturnType {
   
@@ -80,7 +102,7 @@ const param = {
 };
 
 
-    let response = await axios.get(apiEndP, param);
+    let response = await axios.get<DataAWS>(apiEndP, param);
     
       
 
@@ -93,29 +115,29 @@ lastEvaluatedKey = response.data.LastEvaluatedKey
 
 
     // return that data(records)
-    return {...response.data};
+    return {...response.data as DataAWS};
   }
  
-  const createProduct = async (ListedData:Item) => {
+  const createProduct = async (listingData:ListingData) => {
         //TODO abstract this response into next api folder for additional security
 
        const params:CreateProductBody = {  //DO NOT STRING; there is stringify in XML compilation. AWS dynamo DB needs strings
           Item: 
           {
-             listing: ListedData.listing, // must be a string with partition key of listing //required
+             listing: listingData.listing, // must be a string with partition key of listing //required
            
             productImage: 
-               ListedData.productImage,
+               listingData.productImage,
             
         
                 Contact:
                   
-                ListedData.Contact,
-                shipping: ListedData.shipping ,
+                listingData.Contact,
+                shipping: listingData.shipping ,
                 
-                Online: ListedData.Online,//state,
-                proDesc: ListedData.proDesc,
-                price: ListedData.price,    //"₥35" This is the format to display with the Mill symbol 
+                Online: listingData.Online,//state,
+                proDesc: listingData.proDesc,
+                price: listingData.price,    //"₥35" This is the format to display with the Mill symbol 
           },
           ReturnConsumedCapacity: "TOTAL", 
           TableName: "Listings"
@@ -161,7 +183,7 @@ lastEvaluatedKey = response.data.LastEvaluatedKey
 type TableName =   string;
 
  type CreateProductBody = {
-  Item: Item;
+  Item: ListingData;
   ReturnConsumedCapacity: string;
   TableName: string;
 }
